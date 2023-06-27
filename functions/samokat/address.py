@@ -9,7 +9,7 @@ def input_address_on_map(driver, city, street, house, flat=None):
     Если объект не найден вызовет ошибку
     :param driver:
     :param city:
-    :param street:
+    :param street: должна в точности соответствовать названию в 2гис
     :param house:
     :param flat:
     :return:
@@ -25,22 +25,24 @@ def input_address_on_map(driver, city, street, house, flat=None):
         if elem.get_attribute('placeholder') == 'Улица и дом':
             elem_input_street_house = elem
             elem_input_street_house.send_keys(street + ', ' + str(house))
-            time.sleep(5)
+            time.sleep(3)
             element_click_street_house = driver.find_element(
                 By.XPATH,
                 '//span[text()="' + street + ', ' + str(house) + '"]'
             )
             element_click_street_house.click()
-            time.sleep(1)
+            time.sleep(4)
             element_click_accept_address = driver.find_element(By.XPATH, '//span[text()="Да, всё верно"]')
             element_click_accept_address.click()
             break
+    time.sleep(1)
     if flat is not None:
         elements_input = driver.find_elements(By.CLASS_NAME, '_textInput_fov91_1')
         for elem in elements_input:
             if elem.get_attribute('placeholder') == 'Квартира или офис':
                 elem_input_flat = elem
                 elem_input_flat.send_keys(str(flat))
+                break
     elem_save_address_click = driver.find_element(By.XPATH, '//span[text()="Сохранить"]')
     elem_save_address_click.click()
 
@@ -57,7 +59,7 @@ def input_first_address(driver, city, street, house, flat=None):
     """
     elem_address_select = driver.find_element(By.CLASS_NAME, '_control_8rylp_4')
     elem_address_select.click()
-    input_address_on_map(driver, city, street, house, flat=None)
+    input_address_on_map(driver, city, street, house, flat)
 
 
 def input_new_address(driver, city, street, house, flat=None):
